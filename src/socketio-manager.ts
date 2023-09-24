@@ -1,19 +1,19 @@
 import { Manager, Socket } from "socket.io-client";
 
+let socket: Socket
+
 export const connectToServer = (token: string) => {
     const manager = new Manager('http://localhost:3000', {
         extraHeaders: {
             authentication: token
         }
     });
-    const socket = manager.socket('/');
-
-    socket.connect();
-
-    addListeners(socket);
+    socket?.removeAllListeners();
+    socket = manager.socket('/');
+    addListeners();
 }
 
-const addListeners = (socket: Socket) => {
+const addListeners = () => {
     socket.on('connect', () => {
         document.querySelector<HTMLSpanElement>('#socket-status')!.innerText = 'Online';
     });
